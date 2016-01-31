@@ -9,13 +9,15 @@ from Troubleshooting.data import DataItem
 class EditorInfo(DataSection):
 
     def __init__(self, *args, **kwargs):
-        super().__init__('Editor Info', *args, **kwargs)
+        super().__init__('Editor info', *args, **kwargs)
 
     # Returns information about the currently running editor. This is the
     # only public API.
     @classmethod
     def from_current_editor(cls):
-        return SublimeTextInfo()
+        info = SublimeTextInfo()
+        info.collect()
+        return info
 
     # Indicates where the information was extracted from.
     @property
