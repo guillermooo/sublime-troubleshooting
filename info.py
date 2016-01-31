@@ -11,7 +11,7 @@ class EditorInfo(MarkdownReportSnippetGeneratorMixin):
 
     @property
     def editor_name(self):
-        pass    
+        pass
 
     @property
     def version(self):
@@ -41,7 +41,7 @@ class SublimeTextInfo(EditorInfo):
     @property
     def editor_name(self):
         return "Sublime Text"
-    
+
     @property
     def version(self):
         return sublime.version()
@@ -60,7 +60,7 @@ class PlatformInfo(MarkdownReportSnippetGeneratorMixin):
     @property
     def source(self):
         pass
-    
+
     @property
     def product_name(self):
         pass
@@ -68,7 +68,7 @@ class PlatformInfo(MarkdownReportSnippetGeneratorMixin):
     @property
     def version(self):
         pass
-    
+
     @property
     def architecture(self):
         pass
@@ -88,7 +88,7 @@ class WindowsInfo(PlatformInfo):
 
     @property
     def source(self):
-        return "systeminfo.exe"    
+        return "systeminfo.exe"
 
     @property
     def product_name(self):
@@ -97,7 +97,7 @@ class WindowsInfo(PlatformInfo):
     @property
     def version(self):
         return '10.10.10.10 Build 101010'
-    
+
     @property
     def architecture(self):
         return 'x64'
@@ -114,13 +114,14 @@ class Report(object):
     def extend(self, infos):
         self._infos.extend(infos)
 
-    def show(self):
+    def generate(self):
+        buf = []
         for info in self._infos:
-            print(str(info))
-            print("")
+            buf.append(str(info))
+        return ''.join(buf)
 
 
 def plugin_loaded():
     report = Report()
     report.extend([SublimeTextInfo(), WindowsInfo()])
-    report.show()
+    print(report.generate())
