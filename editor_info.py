@@ -1,12 +1,12 @@
 import sublime
 
 
-from Troubleshooting.data import DataBlock
+from Troubleshooting.data import DataSection
 from Troubleshooting.data import DataItem
 
 
 # Information about a text editor.
-class EditorInfo(DataBlock):
+class EditorInfo(DataSection):
 
     def __init__(self, *args, **kwargs):
         super().__init__('Editor Info', *args, **kwargs)
@@ -42,9 +42,9 @@ class SublimeTextInfo(EditorInfo):
         return 'Sublime Text API'
 
     def collect(self):
-        self.items.clear()
-        self.items.append(DataItem('name', 'Sublime Text'))
-        self.items.append(DataItem('version', sublime.version()))
-        self.items.append(DataItem('architecture', sublime.arch()))
-        self.items.append(DataItem('channel', sublime.channel()))
-        self.items.append(DataItem('platform', sublime.platform()))
+        self.elements.clear()
+        self.elements.append(DataItem('name', 'Sublime Text'))
+        self.elements.append(DataItem('version', sublime.version()))
+        self.elements.append(DataItem('architecture', sublime.arch()))
+        self.elements.append(DataItem('channel', sublime.channel()))
+        self.elements.append(DataItem('platform', sublime.platform()))

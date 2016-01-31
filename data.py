@@ -22,3 +22,16 @@ class DataBlock(object):
     def __str__(self):
         title = [self.title] if not self.items else [self.title + '\n']
         return '\n'.join(title + [str(item) for item in self.items])
+
+
+class DataSection(object):
+
+    def __init__(self, title, description='', elements=None):
+        self.title = title
+        self.description = description
+        # An element can be a DataItem or a DataBlock.
+        self.elements = elements or []
+
+    def __str__(self):
+        title = [self.title] if not self.elements else [title + '\n']
+        return '\n'.join(title + [str(block) for block in self.elements])
