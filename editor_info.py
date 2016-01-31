@@ -24,6 +24,9 @@ class EditorInfo(DataSection):
     def provider(self):
         raise TypeError("don't instantiate %s" % self.__class__.__name__)
 
+    # TODO: Some providers will take long to generate data, so we need to notify the caller when
+    # we are done in some way; probably via events. Also, display some visual indication when
+    # some long-running op is in progress.
     # Collects data about the editor.
     def collect(self):
         raise TypeError("don't instantiate %s" % self.__class__.__name__)
