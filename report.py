@@ -3,7 +3,7 @@ from Troubleshooting.data import DataSection
 from Troubleshooting.data import DataItem
 
 
-class MarkDownWriter(object):
+class MarkDownWriterMixin(object):
 
     def __init__(self):
         # We can't start adding stuff right away, we need to call .collect_markup() first.
@@ -33,7 +33,7 @@ class MarkDownWriter(object):
         return text
 
 
-class Report(MarkDownWriter):
+class Report(MarkDownWriterMixin):
 
     def __init__(self):
         super().__init__()
