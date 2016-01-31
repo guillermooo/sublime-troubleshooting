@@ -1,0 +1,1 @@
+A package for Sublime Text that helps you troubleshoot issues and generate complete error reports.
