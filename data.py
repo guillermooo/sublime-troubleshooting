@@ -1,4 +1,26 @@
+import abc
 
+
+class DataProvider(metaclass=abc.ABCMeta):
+
+    @classmethod
+    @abc.abstractmethod
+    def from_current(cls):
+        pass
+
+    # Indicates where the information was extracted from.
+    @property
+    @abc.abstractmethod
+    def provider(self):
+        pass
+
+    # TODO: Some providers will take long to generate data, so we need to notify the caller when
+    # we are done in some way; probably via events. Also, display some visual indication when
+    # some long-running op is in progress.
+    # Collects data about the editor.
+    @abc.abstractmethod
+    def collect(self):
+        pass
 
 # TODO: make this a named tuple?
 class DataItem(object):

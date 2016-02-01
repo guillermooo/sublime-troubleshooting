@@ -1,12 +1,14 @@
-import sublime
+import abc
 
+import sublime
 
 from .data import DataSection
 from .data import DataItem
+from .data import DataProvider
 
 
 # Information about a text editor.
-class EditorInfo(DataSection):
+class EditorInfo(DataProvider, DataSection):
 
     def __init__(self, *args, **kwargs):
         super().__init__('Editor info', *args, **kwargs)
@@ -14,22 +16,24 @@ class EditorInfo(DataSection):
     # Returns information about the currently running editor. This is the
     # only public API.
     @classmethod
-    def from_current_editor(cls):
+    def from_current(cls):
         info = SublimeTextInfo()
         info.collect()
         return info
 
     # Indicates where the information was extracted from.
     @property
+    @abc.abstractmethod
     def provider(self):
-        raise TypeError("don't instantiate %s" % self.__class__.__name__)
+        pass
 
     # TODO: Some providers will take long to generate data, so we need to notify the caller when
     # we are done in some way; probably via events. Also, display some visual indication when
     # some long-running op is in progress.
     # Collects data about the editor.
+    @abc.abstractmethod
     def collect(self):
-        raise TypeError("don't instantiate %s" % self.__class__.__name__)
+        pass
 
 
 # Information about Sublime Text.
@@ -39,7 +43,7 @@ class SublimeTextInfo(EditorInfo):
         super().__init__(description='General details about Sublime Text')
 
     @classmethod
-    def from_current_editor(cls):
+    def from_current(cls):
         return self
 
     @property

@@ -9,16 +9,16 @@ from Troubleshooting.editor_info import EditorInfo
 class TestEditorInfo(unittest.TestCase):
 
     def testCanInstantiate(self):
-        ei = EditorInfo.from_current_editor()
+        ei = EditorInfo.from_current()
         self.assertEqual('Editor Info', ei.title)
         self.assertEqual([], ei.elements)
 
     def testKnowsProviderName(self):
-        ei = EditorInfo.from_current_editor()
+        ei = EditorInfo.from_current()
         self.assertEqual('Sublime Text API', ei.provider)
 
     def testCanCollectData(self):
-        ei= EditorInfo.from_current_editor()
+        ei= EditorInfo.from_current()
         ei.collect()
         self.assertEqual(5, len(ei.elements))
         self.assertEqual("name=Sublime Text", str(ei.elements[0]))
