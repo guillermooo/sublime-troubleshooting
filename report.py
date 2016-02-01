@@ -1,8 +1,9 @@
-from Troubleshooting.editor_info import EditorInfo
-from Troubleshooting.data import DataSection
-from Troubleshooting.data import DataItem
+from .editor_info import EditorInfo
+from .data import DataSection
+from .data import DataItem
 
 
+# TODO: use abc module.
 class MarkDownWriterMixin(object):
 
     def __init__(self):

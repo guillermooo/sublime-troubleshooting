@@ -1,8 +1,8 @@
 import sublime
 
 
-from Troubleshooting.data import DataSection
-from Troubleshooting.data import DataItem
+from .data import DataSection
+from .data import DataItem
 
 
 # Information about a text editor.
