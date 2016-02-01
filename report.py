@@ -148,16 +148,16 @@ class CencellationToken(object):
 
 
 def show_progress():
-    ct = CencellationToken()
+    token = CencellationToken()
+    view = sublime.active_window().active_view()
     length = 0
-    v = sublime.active_window().active_view()
-    def progress(ct):        
+    def progress():
         nonlocal length
-        if ct.is_cancelled:
-            v.set_status('px', '')
+        if token.is_cancelled:
+            view.set_status('px', '')
             return
         length += 1 % 1000
-        v.set_status('px', 'Generating report' + '.' * (length % 3 + 1))
-        sublime.set_timeout(lambda: progress(ct), 250)
-    sublime.set_timeout(lambda: progress(ct), 350)
-    return ct
+        view.set_status('px', '{:<20}'.format('Generating report' + '.' * (length % 3 + 1)))
+        sublime.set_timeout(progress, 250)
+    sublime.set_timeout(progress, 350)
+    return token
