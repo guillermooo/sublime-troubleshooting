@@ -116,10 +116,11 @@ def plugin_loaded():
             show(report)
 
     report = Report()
+
+    dispose_progress = show_progress("Troubleshooting: Generating report")     
+    countdown = len(report.infos)
     
-    futures = report.collect(on_done)    
-    countdown = len(futures)
-    dispose_progress = show_progress("Troubleshooting: Generating report") 
+    report.collect(on_done)    
 
 
 def show(report):
