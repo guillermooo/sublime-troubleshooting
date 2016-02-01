@@ -1,3 +1,4 @@
+import time
 import abc
 
 import sublime
@@ -19,7 +20,6 @@ class PlatformInfo(DataProvider, DataSection):
     @classmethod
     def from_current(cls):
         info = WindowsInfo()
-        info.collect()
         return info
 
     # Indicates where the information was extracted from.
@@ -52,6 +52,7 @@ class WindowsInfo(PlatformInfo):
         return 'systeminfo.exe'
 
     def collect(self):
+        time.sleep(5)
         self.elements.clear()
 
         db0 = DataBlock('Version and architecture')

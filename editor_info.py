@@ -1,4 +1,5 @@
 import abc
+import time
 
 import sublime
 
@@ -19,7 +20,6 @@ class EditorInfo(DataProvider, DataSection):
     @classmethod
     def from_current(cls):
         info = SublimeTextInfo()
-        info.collect()
         return info
 
     # Indicates where the information was extracted from.
@@ -52,6 +52,7 @@ class SublimeTextInfo(EditorInfo):
         return 'Sublime Text API'
 
     def collect(self):
+        time.sleep(3)
         self.elements.clear()
 
         db0 = DataBlock('Version and architecture')
