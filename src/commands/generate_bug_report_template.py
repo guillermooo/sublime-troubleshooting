@@ -1,3 +1,5 @@
+from threading import Lock
+
 import sublime_plugin
 
 from ..plugin.report import Report
@@ -8,14 +10,16 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.lock = Lock()
 
     def run(self):
         def on_done(f):
             nonlocal countdown
-            countdown -= 1
-            if countdown == 0:
-                dispose_progress()
-                self.show(report)
+            with self.lock:
+                countdown -= 1
+                if countdown == 0:
+                    dispose_progress()
+                    self.show(report)
 
         report = Report()
 
