@@ -1,0 +1,6 @@
+[
+    {
+        "caption": "Troubleshooting: Generate Bug Report Template",
+        "command": "generate_bug_report_template"
+    }
+]
