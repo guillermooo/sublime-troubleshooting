@@ -52,7 +52,6 @@ class SublimeTextInfo(EditorInfo):
         return 'Sublime Text API'
 
     def collect(self):
-        time.sleep(3)
         self.elements.clear()
 
         db0 = DataBlock('Version and architecture')

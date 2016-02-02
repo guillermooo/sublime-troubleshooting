@@ -138,7 +138,7 @@ def show_progress(message):
         spec = '{:<%d}' % (len(message) + 3)
         view.set_status('ts.status', spec.format(message + '.' * (counter % 3 + 1)))
         
-        sublime.set_timeout(progress, 350)
+        sublime.set_timeout(progress, 100)
 
     sublime.set_timeout(progress, 350)
 
