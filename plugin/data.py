@@ -57,3 +57,18 @@ class DataSection(object):
     def __str__(self):
         title = [self.title] if not self.elements else [title + '\n']
         return '\n'.join(title + [str(block) for block in self.elements])
+
+
+class UserDataSection(DataSection):
+
+    def __init__(self, title, description):
+        super().__init__(title, description)
+
+    @property
+    def items(self, value):
+        raise TypeError('cannot have items')
+
+    @items.setter
+    def items(self, value):
+        raise TypeError('cannot have items')
+    
