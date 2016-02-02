@@ -10,7 +10,7 @@ class TestEditorInfo(unittest.TestCase):
 
     def testCanInstantiate(self):
         ei = EditorInfo.from_current()
-        self.assertEqual('Editor Info', ei.title)
+        self.assertEqual('Editor info', ei.title)
         self.assertEqual([], ei.elements)
 
     def testKnowsProviderName(self):
@@ -20,9 +20,6 @@ class TestEditorInfo(unittest.TestCase):
     def testCanCollectData(self):
         ei= EditorInfo.from_current()
         ei.collect()
-        self.assertEqual(5, len(ei.elements))
-        self.assertEqual("name=Sublime Text", str(ei.elements[0]))
-        self.assertEqual("version={0}".format(sublime.version()), str(ei.elements[1]))
-        self.assertEqual("architecture={0}".format(sublime.arch()), str(ei.elements[2]))
-        self.assertEqual("channel={0}".format(sublime.channel()), str(ei.elements[3]))
-        self.assertEqual("platform={0}".format(sublime.platform()), str(ei.elements[4]))
+        self.assertEqual(3, len(ei.elements))
+        self.assertEqual("Version and architecture", ei.elements[0].title)
+        self.assertEqual("View settings", ei.elements[1].title)

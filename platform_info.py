@@ -52,7 +52,6 @@ class WindowsInfo(PlatformInfo):
         return 'systeminfo.exe'
 
     def collect(self):
-        time.sleep(5)
         self.elements.clear()
 
         db0 = DataBlock('Version and architecture')
