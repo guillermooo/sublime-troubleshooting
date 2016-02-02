@@ -18,3 +18,10 @@
 sftp-config.json
 
 
+# python
+
+__pycache__
+
+# project
+
+venv/
