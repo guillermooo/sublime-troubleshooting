@@ -4,5 +4,17 @@
 		{
 			"path": "."
 		}
+	],
+
+	"build_systems":
+	[
+		{
+			"name": "Troubleshooting (Dev): Restart Editor",
+			"windows":
+			{
+				"working_dir": "$project_path",
+				"cmd": ["powershell", "-noprofile", "-file", "./bin/RestartSublimeText.ps1"]
+			}
+		}
 	]
 }
