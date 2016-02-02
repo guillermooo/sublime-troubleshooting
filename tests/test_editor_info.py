@@ -2,7 +2,7 @@ import unittest
 
 import sublime
 
-from Troubleshooting.editor_info import EditorInfo
+from Troubleshooting.plugin.editor_info import EditorInfo
 
 
 # add attribute to test this only on Sublime Text

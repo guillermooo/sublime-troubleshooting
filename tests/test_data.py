@@ -1,7 +1,7 @@
 import unittest
 
-from Troubleshooting.data import DataItem
-from Troubleshooting.data import DataBlock
+from Troubleshooting.plugin.data import DataItem
+from Troubleshooting.plugin.data import DataBlock
 
 
 class TestDataItem(unittest.TestCase):

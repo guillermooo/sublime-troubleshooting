@@ -1,7 +1,7 @@
 import unittest
 
-from Troubleshooting.report import Report
-from Troubleshooting.report import MarkDownWriterMixin
+from Troubleshooting.plugin.report import Report
+from Troubleshooting.plugin.report import MarkDownWriterMixin
 
 
 class TestReport(unittest.TestCase):
