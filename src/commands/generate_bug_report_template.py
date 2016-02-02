@@ -19,7 +19,8 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
 
         report = Report()
 
-        dispose_progress = show_progress("Troubleshooting: Generating report")     
+        dispose_progress = show_progress("Troubleshooting: Generating report",
+            'ts.progress', self.window.active_view())
         countdown = len(report.infos)
         
         report.collect(on_done)
