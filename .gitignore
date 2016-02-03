@@ -25,3 +25,7 @@ __pycache__
 # project
 
 venv/
+
+# pybuilder
+
+target/
