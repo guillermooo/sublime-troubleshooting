@@ -136,9 +136,9 @@ def show_progress(message, status_key, view=None):
         counter += 1 % 1000
         view.set_status(status_key, spec.format(message + '.' * (counter % 3 + 1)))
 
-        sublime.set_timeout(progress, 100)
+        sublime.set_timeout(progress, 350)
 
-    sublime.set_timeout(progress, 350)
+    sublime.set_timeout(progress, 100)
 
     def dispose():
         nonlocal counter
