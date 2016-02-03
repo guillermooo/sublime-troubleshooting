@@ -1,7 +1,4 @@
-import time
 import abc
-
-import sublime
 
 from ..plugin.data import DataSection
 from ..plugin.data import DataItem
@@ -45,7 +42,7 @@ class WindowsInfo(PlatformInfo):
 
     @classmethod
     def from_current(cls):
-        return self
+        return cls()
 
     @property
     def provider(self):

@@ -5,6 +5,7 @@ from subprocess import call
 
 from pybuilder.core import use_plugin
 from pybuilder.core import task
+from pybuilder.core import init
 
 
 SUBLIME_TEXT_DATA_PATH = os.environ.get('SUBLIME_TEXT_DATAX')
@@ -13,10 +14,12 @@ SUBLIME_TEXT_DATA_PATH = os.environ.get('SUBLIME_TEXT_DATAX')
 # use_plugin("python.unittest")
 # use_plugin("python.coverage")
 # use_plugin("python.distutils")
+use_plugin("python.flake8")
 
-@task
-def greet():
-    print("hello")
+@init
+def initialize(project):
+    project.version = "0.0.1"
+    project.set_property('dir_source_main_python', 'src')
 
 
 @task
@@ -55,4 +58,4 @@ def _make_junction(base):
     call(['cmd', '/c', 'mklink', '/J', 'Troubleshootingtests', os.path.join(base, 'tests')], shell=True)
 
 
-default_task = "greet"
+default_task = "analyze"

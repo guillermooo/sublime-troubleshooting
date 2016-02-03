@@ -22,6 +22,7 @@ class DataProvider(metaclass=abc.ABCMeta):
     def collect(self):
         pass
 
+
 # TODO: make this a named tuple?
 class DataItem(object):
 
@@ -55,7 +56,7 @@ class DataSection(object):
         self.elements = elements or []
 
     def __str__(self):
-        title = [self.title] if not self.elements else [title + '\n']
+        title = [self.title] if not self.elements else [self.title + '\n']
         return '\n'.join(title + [str(block) for block in self.elements])
 
 
@@ -71,4 +72,3 @@ class UserDataSection(DataSection):
     @items.setter
     def items(self, value):
         raise TypeError('cannot have items')
-    

@@ -1,5 +1,4 @@
 import abc
-import time
 
 import sublime
 
@@ -45,7 +44,7 @@ class SublimeTextInfo(EditorInfo):
 
     @classmethod
     def from_current(cls):
-        return self
+        return cls()
 
     @property
     def provider(self):

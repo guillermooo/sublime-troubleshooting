@@ -24,12 +24,12 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
         report = Report()
 
         dispose_progress = show_progress("Troubleshooting: Generating report",
-            'ts.progress', self.window.active_view())
+                                         'ts.progress', self.window.active_view())
         countdown = len(report.infos)
-        
+
         report.collect(on_done)
 
     def show(self, report):
         v = self.window.new_file()
         v.set_name("Bug Report for Sublime Text")
-        v.run_command('insert', {'characters': report.generate()})        
+        v.run_command('insert', {'characters': report.generate()})
