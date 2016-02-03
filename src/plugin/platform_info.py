@@ -50,7 +50,7 @@ class WindowsInfo(PlatformInfo):
     def provider(self):
         return 'systeminfo.exe'
 
-    def call(self, cmd):
+    def call_and_parse(self, cmd):
         output = check_output(cmd).decode('utf8')
         data = {}
         for line in (item for item in output.split('\r\n') if item):
@@ -60,7 +60,7 @@ class WindowsInfo(PlatformInfo):
         return data
 
     def collect(self):
-        data = self.call(['systeminfo.exe'])
+        data = self.call_and_parse(['systeminfo.exe'])
 
         self.elements.clear()
 
