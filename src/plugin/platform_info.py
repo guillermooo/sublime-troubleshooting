@@ -1,5 +1,7 @@
 import abc
 
+from subprocess import check_output
+
 from ..plugin.data import DataSection
 from ..plugin.data import DataItem
 from ..plugin.data import DataBlock
@@ -48,16 +50,38 @@ class WindowsInfo(PlatformInfo):
     def provider(self):
         return 'systeminfo.exe'
 
+    def call(self, cmd):
+        output = check_output(cmd).decode('utf8')
+        data = {}
+        for line in (item for item in output.split('\r\n') if item):
+            if not line.startswith(' '):
+                head, tail = line.split(':', 1)
+                data[head.strip().upper()] = tail.strip()
+        return data
+
     def collect(self):
+        data = self.call(['systeminfo.exe'])
+
         self.elements.clear()
 
         db0 = DataBlock('Version and architecture')
-        db0.items.append(DataItem('name', 'Windows 10 Pro'))
-        db0.items.append(DataItem('version', '10000'))
-        db0.items.append(DataItem('architecture', 'x64'))
+        db0.items.append(DataItem('name', data['OS NAME']))
+        db0.items.append(DataItem('version', data['OS VERSION']))
+        db0.items.append(DataItem('architecture', data['SYSTEM TYPE']))
+        db0.items.append(DataItem('OS build type', data['OS BUILD TYPE']))
+        db0.items.append(DataItem('OS configuration', data['OS CONFIGURATION']))
 
-        db1 = DataBlock('Other')
-        db1.items.append(DataItem('Hyper-V enabled', 'true'))
+        db1 = DataBlock('Local information')
+        db1.items.append(DataItem('input locale', data['INPUT LOCALE']))
+        db1.items.append(DataItem('system locale', data['SYSTEM LOCALE']))
+
+        db2 = DataBlock('System information')
+        db2.items.append(DataItem('windows directory', data['WINDOWS DIRECTORY']))
+        db2.items.append(DataItem('total physical memory', data['TOTAL PHYSICAL MEMORY']))
+        db2.items.append(DataItem('available physical memory', data['AVAILABLE PHYSICAL MEMORY']))
+        db2.items.append(DataItem('virtual memory', data['VIRTUAL MEMORY']))
+        db2.items.append(DataItem('page file location(s)', data['PAGE FILE LOCATION(S)']))
 
         self.elements.append(db0)
         self.elements.append(db1)
+        self.elements.append(db2)

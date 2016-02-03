@@ -124,7 +124,7 @@ def show_progress(message, status_key, view=None):
     view = view if view else sublime.active_window().active_view()
     counter = 0
     # Pad with spaces so it reserves space in the status bar.
-    message = '{:<%d}' % (len(message) + 3)
+    spec = '{:<%d}' % (len(message) + 3)
 
     def progress():
         nonlocal counter
@@ -134,7 +134,7 @@ def show_progress(message, status_key, view=None):
             return
 
         counter += 1 % 1000
-        view.set_status(status_key, message + '.' * (counter % 3 + 1))
+        view.set_status(status_key, spec.format(message + '.' * (counter % 3 + 1)))
 
         sublime.set_timeout(progress, 100)
 
