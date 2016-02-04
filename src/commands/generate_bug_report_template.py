@@ -18,7 +18,7 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
         self.lock = Lock()
 
     def run(self):
-        def on_done(f):
+        def on_each_done(f):
             nonlocal countdown
             with self.lock:
                 countdown -= 1
@@ -32,7 +32,7 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
                                          'ts.progress', self.window.active_view())
         countdown = len(report.infos)
 
-        report.collect(on_done)
+        report.collect(on_each_done)
 
     def show(self, report):
         v = self.window.new_file()

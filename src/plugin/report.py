@@ -56,12 +56,12 @@ class Report(MarkDownWriterMixin):
         self.infos.append(EditorInfo.from_current())
         self.infos.append(PlatformInfo.from_current())
 
-    def collect(self, cb=bool):
+    def collect(self, callback=bool):
         executor = ThreadPoolExecutor(max_workers=1)
         futures = []
         for info in self.infos:
             future = executor.submit(info.collect)
-            future.add_done_callback(cb)
+            future.add_done_callback(callback)
             futures.append(future)
         return futures
 
