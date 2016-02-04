@@ -12,6 +12,8 @@ PS> ./venv/Scripts/activate.ps1
 PS> (venv) pip install -r requirements.txt
 ```
 
+---
+
 **For OS X or Linux**, symlink *./src* as *Data/Packages/Troubleshooting*, and *./tests* as *Data/Packages/Troubleshootingtests*.
 
 ---
