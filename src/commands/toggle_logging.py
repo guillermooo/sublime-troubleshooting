@@ -4,6 +4,11 @@ import sublime
 import sublime_plugin
 
 
+__all__ = (
+    'ToggleLoggingCommand',
+    )
+
+
 def show_status(view, key, message, duration=0):
     view.set_status(key, message)
 

@@ -6,6 +6,11 @@ from ..plugin.report import Report
 from ..plugin.report import show_progress
 
 
+__all__ = (
+   'GenerateBugReportTemplateCommand',
+    )
+
+
 class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
 
     def __init__(self, *args, **kwargs):

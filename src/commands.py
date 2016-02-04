@@ -1,1 +1,1 @@
-from .commands import GenerateBugReportTemplateCommand
+from .commands import *
