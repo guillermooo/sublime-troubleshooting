@@ -2,5 +2,17 @@
     {
         "caption": "Troubleshooting: Generate Bug Report Template",
         "command": "generate_bug_report_template"
-    }
+    },
+
+    {
+        "caption": "Troubleshooting: Toggle Command Logging",
+        "command": "toggle_logging",
+        "args": { "kind": "commands"}
+    },
+
+    {
+        "caption": "Troubleshooting: Toggle Keyboard Input Logging",
+        "command": "toggle_logging",
+        "args": { "kind": "input"}
+    }    
 ]
