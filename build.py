@@ -8,7 +8,7 @@ from pybuilder.core import task
 from pybuilder.core import init
 
 
-SUBLIME_TEXT_DATA_PATH = os.environ.get('SUBLIME_TEXT_DATAX')
+SUBLIME_TEXT_DATA_PATH = os.environ.get('SUBLIME_TEXT_DATA')
 
 # use_plugin("python.core")
 # use_plugin("python.unittest")
@@ -32,7 +32,7 @@ def develop():
         print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
         return
 
-    with cd(SUBLIME_TEXT_DATA_PATH) as old:
+    with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')) as old:
         _make_junction(old)        
 
 
