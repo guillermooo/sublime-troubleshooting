@@ -27,7 +27,7 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
         super().__init__(*args, **kwargs)
         self.states = defaultdict(lambda: False)
         self.options = ['commands', 'input', 'commands+input', 'build systems', 'result regex', 'build systems+result regex']
-        self.actions = {
+        self.toggles = {
             'commands': lambda x: sublime.log_commands(x),
             'input': lambda x: sublime.log_input(x),
             'build systems': lambda x: sublime.log_build_systems(x),
@@ -36,21 +36,20 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
 
     def run(self):
         items = [[o, str(self.states[o]) if '+' not in o else '--'] for o in self.options]
-        self.window.show_quick_panel(items, self.toggle)        
+        self.window.show_quick_panel(items, self.on_select)        
 
-    def toggle(self, index):
+    def on_select(self, index):
         kinds = self.options[index]        
         for kind in kinds.split('+'):            
             try:
                 state = self.states[kind]
-                self.actions[kind](not state)
+                self.toggles[kind](not state)
+                self.states[kind] = not state
             except KeyError:
                 show_status(self.window.active_view(),
                             'ts.status', 'Troubleshooting: Unknown kind of logging: "{}"'
                             .format(kind), duration=4000)
                 return
-            else:
-                self.states[kind] = not state
 
         fragment = '; '.join('logging %s: {}' % item for item in kinds.split('+'))
         show_status(self.window.active_view(),
