@@ -43,6 +43,8 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
         self.window.show_quick_panel(items, self.on_select)        
 
     def on_select(self, index):
+        if index == -1:
+            return
         kinds = self.options[index]        
         for kind in kinds.split('+'):            
             try:
