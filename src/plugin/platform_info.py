@@ -1,11 +1,14 @@
 import abc
+2
+from subprocess import TimeoutExpired
 
-from subprocess import check_output
+from ..lib.subprocess import check_output
 
 from ..plugin.data import DataSection
 from ..plugin.data import DataItem
 from ..plugin.data import DataBlock
 from ..plugin.data import DataProvider
+
 
 
 # Information about an OS.
@@ -51,9 +54,13 @@ class WindowsInfo(PlatformInfo):
         return 'systeminfo.exe'
 
     def call_and_parse(self, cmd):
-        output = check_output(cmd).decode('utf8')
+        try:
+            output = check_output(cmd, universal_newlines=True, timeout=30)
+        except TimeoutExpired:
+            return {}
+
         data = {}
-        for line in (item for item in output.split('\r\n') if item):
+        for line in (item for item in output.split('\n') if item):
             if not line.startswith(' '):
                 head, tail = line.split(':', 1)
                 data[head.strip().upper()] = tail.strip()
@@ -61,6 +68,10 @@ class WindowsInfo(PlatformInfo):
 
     def collect(self):
         data = self.call_and_parse(['systeminfo.exe'])
+
+        if not data:
+            self.elements.append(DataBlock('No data retrieved'))
+            return
 
         self.elements.clear()
 
