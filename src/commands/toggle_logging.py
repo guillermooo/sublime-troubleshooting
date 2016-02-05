@@ -13,7 +13,9 @@ def show_status(view, key, message, duration=0):
     view.set_status(key, message)
 
     def dispose():
-        view.set_status(key, '')
+        # Easy check to see if we are disposing the message we set.
+        if view.get_status(key) == message:
+            view.set_status(key, '')
 
     if duration > 0:
         sublime.set_timeout(dispose, duration)
@@ -22,6 +24,8 @@ def show_status(view, key, message, duration=0):
 
 
 class ToggleLoggingCommand(sublime_plugin.WindowCommand):
+    """Toggles logging of different kinds.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

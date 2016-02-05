@@ -12,6 +12,9 @@ __all__ = (
 
 
 class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
+    """Generates a template for reporting a bug about Sublime Text. The template
+    containes pre-filled system and editor data to help diagnose the issue.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -38,3 +41,4 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
         v = self.window.new_file()
         v.set_name("Bug Report for Sublime Text")
         v.run_command('insert', {'characters': report.generate()})
+        v.run_command('set_file_type', {'syntax': 'Packages/Markdown/Markdown.sublime-syntax'})
