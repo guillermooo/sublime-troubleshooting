@@ -30,7 +30,9 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.states = defaultdict(lambda: False)
-        self.options = ['commands', 'input', 'commands+input', 'build systems', 'result regex', 'build systems+result regex']
+        self.options = ['commands', 'input', 'commands+input', 'build systems',
+                        'result regex', 'build systems+result regex'
+                        ]
         self.toggles = {
             'commands': lambda x: sublime.log_commands(x),
             'input': lambda x: sublime.log_input(x),
@@ -40,13 +42,13 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
 
     def run(self):
         items = [[o, str(self.states[o]) if '+' not in o else '--'] for o in self.options]
-        self.window.show_quick_panel(items, self.on_select)        
+        self.window.show_quick_panel(items, self.on_select)
 
     def on_select(self, index):
         if index == -1:
             return
-        kinds = self.options[index]        
-        for kind in kinds.split('+'):            
+        kinds = self.options[index]
+        for kind in kinds.split('+'):
             try:
                 state = self.states[kind]
                 self.toggles[kind](not state)
