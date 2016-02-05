@@ -115,7 +115,7 @@ class WindowsInfo(PlatformInfo):
         db0.items.append(DataItem('OS build type', data['OS BUILD TYPE']))
         db0.items.append(DataItem('OS configuration', data['OS CONFIGURATION']))
 
-        db1 = DataBlock('Local information')
+        db1 = DataBlock('Locale information')
         db1.items.append(DataItem('input locale', data['INPUT LOCALE']))
         db1.items.append(DataItem('system locale', data['SYSTEM LOCALE']))
 
