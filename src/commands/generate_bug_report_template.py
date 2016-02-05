@@ -42,3 +42,10 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
         v.set_name("Bug Report for Sublime Text")
         v.run_command('insert', {'characters': report.generate()})
         v.run_command('set_file_type', {'syntax': 'Packages/Markdown/Markdown.sublime-syntax'})
+        self._select_first_input_line(v)
+        v.show(v.sel()[0])
+
+    def _select_first_input_line(self, view):
+        view.sel().clear()
+        pt = view.text_point(2, 0)
+        view.sel().add(view.line(pt))
