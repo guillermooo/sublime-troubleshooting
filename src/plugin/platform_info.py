@@ -49,27 +49,62 @@ class WindowsInfo(PlatformInfo):
 
     @property
     def provider(self):
-        return 'systeminfo.exe'
+        return 'systeminfo.exe and wmic.exe'
 
-    def call_and_parse(self, cmd):
+    def call(self, cmd, shell=False):
         try:
-            output = check_output(cmd, universal_newlines=True, timeout=30)
+            return check_output(cmd, universal_newlines=True, timeout=30, shell=shell)
         except TimeoutExpired:
-            return {}
+            pass
+
+    def collect(self):
+        self.collect_systeminfo_data()
+        self.collect_wmic_data()
+
+    def collect_wmic_data(self):
+        buf = []
+
+        cmds = [
+            'wmic desktopmonitor get pixelsperxlogicalinch /value',
+            'wmic desktopmonitor get pixelsperylogicalinch /value',
+        ]
+
+        for cmd in cmds:
+            try:
+                output = self.call(cmd.split())
+            except FileNotFoundError:
+                self.elements.append(DataBlock('Could not find wmic.exe'))
+                return
+            if not output.strip():
+                continue
+            buf.append(output.strip())
+
+        if not buf:
+            self.elements.append(DataBlock('No data retrieved from wmic.exe'))
+            return
+
+        db0 = DataBlock('Display information')
+        for item in buf:
+            db0.items.append(DataItem(*item.split('=')))
+
+        self.elements.append(db0)
+
+    def collect_systeminfo_data(self):
+        try:
+            output = self.call(['systeminfo.exe'])
+        except FileNotFoundError:
+            self.elements.append(DataBlock('Could not find systeminfo.exe'))
+            return
+
+        if not output:
+            self.elements.append(DataBlock('No data retrieved from systeminfo.exe'))
+            return
 
         data = {}
         for line in (item for item in output.split('\n') if item):
             if not line.startswith(' '):
                 head, tail = line.split(':', 1)
                 data[head.strip().upper()] = tail.strip()
-        return data
-
-    def collect(self):
-        data = self.call_and_parse(['systeminfo.exe'])
-
-        if not data:
-            self.elements.append(DataBlock('No data retrieved'))
-            return
 
         self.elements.clear()
 
