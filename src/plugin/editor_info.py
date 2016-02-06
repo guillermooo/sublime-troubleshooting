@@ -1,4 +1,5 @@
 import abc
+import os
 
 import sublime
 
@@ -75,8 +76,24 @@ class SublimeTextInfo(EditorInfo):
         db1.items.append(DataItem('em width', view.em_width()))
         db1.items.append(DataItem('selection count', len(view.sel())))
         db1.items.append(DataItem('has non empty selections', view.has_non_empty_selection_region()))
-        # db1.items.append(DataItem('is auto complete visible', view.is_auto_complete_visible()))
 
         self.elements.append(db0)
+
+        # TODO: Split the rest up into methods.
+        self.collect_package_data()
+
         self.elements.append(db1)
         self.elements.append(db2)
+
+    def collect_package_data(self):
+        block = DataBlock('Package data')
+
+        _, packages, _ = next(os.walk(sublime.packages_path()))
+
+        _, _, files = next(os.walk(sublime.installed_packages_path()))
+        files = (f for f in files if f.endswith('.sublime-package'))
+
+        block.items.append(DataItem('package count', str(len(packages))))
+        block.items.append(DataItem('installed package count', str(len(list(files)))))
+
+        self.elements.append(block)

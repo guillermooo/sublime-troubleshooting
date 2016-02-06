@@ -20,6 +20,8 @@ class TestEditorInfo(unittest.TestCase):
     def testCanCollectData(self):
         ei= EditorInfo.from_current()
         ei.collect()
-        self.assertEqual(3, len(ei.elements))
+        self.assertEqual(4, len(ei.elements))
         self.assertEqual("Version and architecture", ei.elements[0].title)
-        self.assertEqual("View settings", str(ei.elements[1].title))
+        self.assertEqual("Package data", str(ei.elements[1].title))
+        self.assertEqual("View settings", str(ei.elements[2].title))
+        self.assertEqual("View state", str(ei.elements[3].title))
