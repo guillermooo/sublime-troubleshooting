@@ -33,7 +33,21 @@ def develop():
         return
 
     with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')) as old:
-        _make_junction(old)        
+        _make_junction(old)
+
+
+@task
+def undevelop():
+    if os.name != 'nt':
+        print("not implemented for OS '%s'", os.name)
+        return
+
+    if not (SUBLIME_TEXT_DATA_PATH and os.path.exists(SUBLIME_TEXT_DATA_PATH)):
+        print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
+        return
+
+    with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')) as old:
+        _remove_junctions(old)
 
 
 @contextlib.contextmanager
