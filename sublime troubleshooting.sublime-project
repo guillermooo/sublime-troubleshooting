@@ -10,10 +10,14 @@
 	[
 		{
 			"name": "Troubleshooting (Dev): Restart Editor",
+			"working_dir": "$project_path",
 			"windows":
 			{
-				"working_dir": "$project_path",
 				"cmd": ["powershell", "-noprofile", "-file", "./bin/RestartSublimeText.ps1"]
+			},
+			"osx":
+			{
+				"shell_cmd": "killall \"Sublime Text\" && subl --command echo"
 			}
 		}
 	]
