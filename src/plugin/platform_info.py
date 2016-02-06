@@ -182,6 +182,8 @@ class OsxInfo(PlatformInfo):
         buf = []
 
         # TODO: Check if user can repeat keys fast
+        # TODO: Add information about useful tools like the step recorder
+        # TODO: Generate purely informational status reports for users
 
         cmds = [
             ('system name', 'uname -s'),

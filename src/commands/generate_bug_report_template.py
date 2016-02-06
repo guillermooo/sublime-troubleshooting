@@ -1,4 +1,5 @@
 from threading import Lock
+import os
 
 import sublime_plugin
 
@@ -41,11 +42,16 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
         v = self.window.new_file()
         v.set_name("Bug Report for Sublime Text")
         v.run_command('insert', {'characters': report.generate()})
-        v.run_command('set_file_type', {'syntax': 'Packages/Markdown/Markdown.sublime-syntax'})
+
+        syntax = 'Packages/Markdown/Markdown.sublime-syntax'
+        if not os.path.exists('Packages/Markdown/Markdown.sublime-syntax'):
+            syntax = 'Packages/Markdown/Markdown.tmLanguage'
+        v.run_command('set_file_type', {'syntax': syntax})
+
         self._select_first_input_line(v)
         v.show(v.sel()[0])
 
     def _select_first_input_line(self, view):
         view.sel().clear()
-        pt = view.text_point(2, 0)
-        view.sel().add(view.line(pt))
+        second_line = view.line(view.text_point(2, 0))
+        view.sel().add(second_line)
