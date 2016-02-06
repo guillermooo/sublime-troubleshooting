@@ -1,3 +1,4 @@
+import sys
 import abc
 from subprocess import TimeoutExpired
 
@@ -19,7 +20,13 @@ class PlatformInfo(DataProvider, DataSection):
     # only public API.
     @classmethod
     def from_current(cls):
-        info = WindowsInfo()
+        plat = sys.platform
+        if plat == 'win32':
+            info = WindowsInfo()
+        elif plat == 'darwin':
+            info = OsxInfo()
+        else:
+            raise NotImplementedError()
         return info
 
     # Indicates where the information was extracted from.
@@ -129,3 +136,80 @@ class WindowsInfo(PlatformInfo):
         self.elements.append(db0)
         self.elements.append(db1)
         self.elements.append(db2)
+
+
+# Information about Sublime Text.
+class OsxInfo(PlatformInfo):
+
+    def __init__(self):
+        super().__init__(description='Details about the current platform')
+
+    @classmethod
+    def from_current(cls):
+        return cls()
+
+    @property
+    def provider(self):
+        return 'command line tools'
+
+    def call(self, cmd, shell=False):
+        try:
+            return check_output(cmd, universal_newlines=True, timeout=30, shell=shell)
+        except TimeoutExpired:
+            pass
+
+    def collect(self):
+        self.collect_uname_data()
+        self.collect_display_data()
+
+    def collect_display_data(self):
+        output = check_output(["system_profiler", "-detailLevel", "mini", "SPDisplaysDataType"], universal_newlines=True)
+
+        if not output:
+            return
+
+        lines = output.split('\n')
+        data = [line.split(':', 1) for line in lines if ':' in line]
+        data = { k.strip().upper(): v.strip() for k, v in data if k.strip() and v.strip() }
+
+        db0 = DataBlock('Display information')
+        db0.items.append(DataItem("resolution", data['RESOLUTION']))
+        db0.items.append(DataItem("pixel depth", data['PIXEL DEPTH']))
+
+        self.elements.append(db0)
+
+    def collect_uname_data(self):
+        buf = []
+
+        # TODO: Check if user can repeat keys fast
+
+        cmds = [
+            ('system name', 'uname -s'),
+            ('system architecture', 'uname -m'),
+            ('system version', 'uname -r'),
+            ('processor', 'uname -p'),
+        ]
+
+        for desc, cmd in cmds:
+            try:
+                output = '{}={}'.format(desc, self.call(cmd.split()))
+            except FileNotFoundError:
+                self.elements.append(DataBlock('Could not find command'))
+                return
+            except Exception as e:
+                self.elements.append(DataBlock('Error running command: %s' % e))
+                return
+
+            if not output.strip():
+                continue
+            buf.append(output.strip())
+
+        if not buf:
+            self.elements.append(DataBlock('No data retrieved'))
+            return
+
+        db0 = DataBlock('System information')
+        for item in buf:
+            db0.items.append(DataItem(*item.split('=')))
+
+        self.elements.append(db0)
