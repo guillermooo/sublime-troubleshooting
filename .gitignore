@@ -1,6 +1,10 @@
 
 # Created by https://www.gitignore.io/api/sublimetext
 
+# OS X
+
+**/.DS_Store
+
 ### SublimeText ###
 # cache files for sublime text
 *.tmlanguage.cache
