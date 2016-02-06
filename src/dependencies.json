@@ -1,0 +1,7 @@
+{
+    "osx": {
+        ">3000": [
+            "multiprocessing"
+        ]
+    }
+}
