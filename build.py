@@ -36,9 +36,6 @@ def develop():
         if not (SUBLIME_TEXT_DATA_PATH and os.path.exists(SUBLIME_TEXT_DATA_PATH)):
             print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
             return
-    elif sys.platform != 'darwin':
-        print("not implemented for OS '%s'" % sys.platform)
-        return
 
     with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')):
         _make_links(SCRIPT_DIR)
@@ -50,9 +47,6 @@ def undevelop():
         if not (SUBLIME_TEXT_DATA_PATH and os.path.exists(SUBLIME_TEXT_DATA_PATH)):
             print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
             return
-    elif sys.platform != 'darwin':
-        print("not implemented for OS '%s'", os.name)
-        return
 
     with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')):
         _remove_links()
@@ -79,7 +73,7 @@ def link_folder(link, target):
         os.symlink(target, link, target_is_directory=True)
 
 
-def remove_link(link):
+def rm_folder_link(link):
     if sys.platform == 'win32':
         call(['rd', link], shell=True)
     else:
@@ -90,8 +84,8 @@ def remove_link(link):
 
 
 def _remove_links():
-    remove_link('Troubleshooting')
-    remove_link('Troubleshootingtests')
+    rm_folder_link('Troubleshooting')
+    rm_folder_link('Troubleshootingtests')
 
 
 def _make_links(base):
