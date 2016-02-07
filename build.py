@@ -39,7 +39,10 @@ def develop():
             return
 
     with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')):
-        _make_links(SCRIPT_DIR)
+        rm_folder_link('Troubleshooting')
+        rm_folder_link('Troubleshootingtests')
+        link_folder('Troubleshooting', os.path.join(SCRIPT_DIR, 'src'))
+        link_folder('Troubleshootingtests', os.path.join(SCRIPT_DIR, 'tests'))
 
 
 @task
@@ -50,7 +53,8 @@ def undevelop():
             return
 
     with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')):
-        _remove_links()
+        rm_folder_link('Troubleshooting')
+        rm_folder_link('Troubleshootingtests')
 
 
 default_task = "analyze"
@@ -75,22 +79,7 @@ def link_folder(link, target):
 
 
 def rm_folder_link(link):
-    if sys.platform == 'win32':
-        call(['rd', link], shell=True)
-    else:
-        try:
-            os.unlink(link)
-        except FileNotFoundError:
-            pass
-
-
-def _remove_links():
-    rm_folder_link('Troubleshooting')
-    rm_folder_link('Troubleshootingtests')
-
-
-def _make_links(base):
-    _remove_links()
-
-    link_folder('Troubleshooting', os.path.join(base, 'src'))
-    link_folder('Troubleshootingtests', os.path.join(base, 'tests'))
+    try:
+        os.unlink(link)
+    except FileNotFoundError:
+        pass
