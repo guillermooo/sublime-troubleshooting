@@ -9,8 +9,14 @@ from pybuilder.core import task
 from pybuilder.core import init
 
 
-SUBLIME_TEXT_DATA_PATH = os.environ.get('SUBLIME_TEXT_DATA')
 SCRIPT_DIR = os.path.dirname(__file__)
+
+if sys.platform == 'win32':
+    SUBLIME_TEXT_DATA_PATH = os.environ.get('SUBLIME_TEXT_DATA')
+elif sys.platform == 'darwin':
+    SUBLIME_TEXT_DATA_PATH = os.path.expanduser('~/Library/Application Support/Sublime Text 3')
+else:
+    SUBLIME_TEXT_DATA_PATH = os.path.expanduser('~/.config/sublime-text-3')
 
 # use_plugin("python.core")
 # use_plugin("python.unittest")
@@ -26,12 +32,12 @@ def initialize(project):
 
 @task
 def develop():
-    if sys.platform != 'win32':
-        print("not implemented for OS '%s'", os.name)
-        return
-
-    if not (SUBLIME_TEXT_DATA_PATH and os.path.exists(SUBLIME_TEXT_DATA_PATH)):
-        print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
+    if sys.platform == 'win32':
+        if not (SUBLIME_TEXT_DATA_PATH and os.path.exists(SUBLIME_TEXT_DATA_PATH)):
+            print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
+            return
+    elif sys.platform != 'darwin':
+        print("not implemented for OS '%s'" % sys.platform)
         return
 
     with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')):
@@ -40,12 +46,12 @@ def develop():
 
 @task
 def undevelop():
-    if sys.platform != 'win32':
+    if sys.platform == 'win32':
+        if not (SUBLIME_TEXT_DATA_PATH and os.path.exists(SUBLIME_TEXT_DATA_PATH)):
+            print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
+            return
+    elif sys.platform != 'darwin':
         print("not implemented for OS '%s'", os.name)
-        return
-
-    if not (SUBLIME_TEXT_DATA_PATH and os.path.exists(SUBLIME_TEXT_DATA_PATH)):
-        print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
         return
 
     with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')):
@@ -70,15 +76,22 @@ def link_folder(link, target):
     if sys.platform == 'win32':
         call(['cmd', '/c', 'mklink', '/J', link, target], shell=True)
     else:
-        raise NotImplementedError()
+        os.symlink(target, link, target_is_directory=True)
+
+
+def remove_link(link):
+    if sys.platform == 'win32':
+        call(['rd', link], shell=True)
+    else:
+        try:
+            os.unlink(link)
+        except FileNotFoundError:
+            pass
 
 
 def _remove_links():
-    if os.path.exists('Troubleshooting'):
-        call(['rd', 'Troubleshooting'], shell=True)
-
-    if os.path.exists('Troubleshootingtests'):
-        call(['rd', 'Troubleshootingtests'], shell=True)
+    remove_link('Troubleshooting')
+    remove_link('Troubleshootingtests')
 
 
 def _make_links(base):
