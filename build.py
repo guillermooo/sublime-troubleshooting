@@ -1,4 +1,5 @@
 import os
+import sys
 import contextlib
 
 from subprocess import call
@@ -9,6 +10,7 @@ from pybuilder.core import init
 
 
 SUBLIME_TEXT_DATA_PATH = os.environ.get('SUBLIME_TEXT_DATA')
+SCRIPT_DIR = os.path.dirname(__file__)
 
 # use_plugin("python.core")
 # use_plugin("python.unittest")
@@ -24,7 +26,7 @@ def initialize(project):
 
 @task
 def develop():
-    if os.name != 'nt':
+    if sys.platform != 'win32':
         print("not implemented for OS '%s'", os.name)
         return
 
@@ -32,13 +34,13 @@ def develop():
         print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
         return
 
-    with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')) as old:
-        _make_junction(old)
+    with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')):
+        _make_links(SCRIPT_DIR)
 
 
 @task
 def undevelop():
-    if os.name != 'nt':
+    if sys.platform != 'win32':
         print("not implemented for OS '%s'", os.name)
         return
 
@@ -46,19 +48,32 @@ def undevelop():
         print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
         return
 
-    with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')) as old:
-        _remove_junctions(old)
+    with cd(os.path.join(SUBLIME_TEXT_DATA_PATH, 'Packages')):
+        _remove_links()
 
+
+default_task = "analyze"
+
+# Utils ///////////////////////////////////////////////////////////////////////
 
 @contextlib.contextmanager
 def cd(new):
     old = os.getcwd()
-    os.chdir(new)
-    yield old
-    os.chdir(old)
+    try:
+        os.chdir(new)
+        yield old
+    finally:
+        os.chdir(old)
 
 
-def _remove_junctions():
+def link_folder(link, target):
+    if sys.platform == 'win32':
+        call(['cmd', '/c', 'mklink', '/J', link, target], shell=True)
+    else:
+        raise NotImplementedError()
+
+
+def _remove_links():
     if os.path.exists('Troubleshooting'):
         call(['rd', 'Troubleshooting'], shell=True)
 
@@ -66,10 +81,8 @@ def _remove_junctions():
         call(['rd', 'Troubleshootingtests'], shell=True)
 
 
-def _make_junction(base):
-    _remove_junctions()
-    call(['cmd', '/c', 'mklink', '/J', 'Troubleshooting', os.path.join(base, 'src')], shell=True)
-    call(['cmd', '/c', 'mklink', '/J', 'Troubleshootingtests', os.path.join(base, 'tests')], shell=True)
+def _make_links(base):
+    _remove_links()
 
-
-default_task = "analyze"
+    link_folder('Troubleshooting', os.path.join(base, 'src'))
+    link_folder('Troubleshootingtests', os.path.join(base, 'tests'))
