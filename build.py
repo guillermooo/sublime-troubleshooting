@@ -32,6 +32,7 @@ def initialize(project):
 
 @task
 def develop():
+    # TODO: locate the path to ST from running process if any.
     if sys.platform == 'win32':
         if not (SUBLIME_TEXT_DATA_PATH and os.path.exists(SUBLIME_TEXT_DATA_PATH)):
             print(r"Can't locate the Data folder. Please set %SUBLIME_TEXT_DATA%.")
