@@ -1,5 +1,6 @@
 import abc
 import os
+import json
 
 import sublime
 
@@ -93,7 +94,10 @@ class SublimeTextInfo(EditorInfo):
         _, _, files = next(os.walk(sublime.installed_packages_path()))
         files = (f for f in files if f.endswith('.sublime-package'))
 
-        block.items.append(DataItem('package count', str(len(packages))))
-        block.items.append(DataItem('installed package count', str(len(list(files)))))
+        ignored_packages = sublime.load_settings('Preferences.sublime-settings')
+
+        block.items.append(DataItem('installed packages', json.dumps(list(files))))
+        block.items.append(DataItem('packages', json.dumps(list(packages))))
+        block.items.append(DataItem('ignored packages', json.dumps(ignored_packages.get('ignored_packages'))))
 
         self.elements.append(block)
