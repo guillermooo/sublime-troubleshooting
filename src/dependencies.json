@@ -3,5 +3,10 @@
         ">3000": [
             "multiprocessing"
         ]
-    }
+    },
+    "linux": {
+        ">3000": [
+            "multiprocessing"
+        ]
+    }    
 }

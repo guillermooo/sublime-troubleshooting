@@ -24,9 +24,9 @@ class PlatformInfo(DataProvider, DataSection):
         if plat == 'win32':
             info = WindowsInfo()
         elif plat == 'darwin':
-            info = OsxInfo()
+            info = UnixInfo()
         else:
-            raise NotImplementedError()
+            info = UnixInfo()
         return info
 
     # Indicates where the information was extracted from.
@@ -139,7 +139,7 @@ class WindowsInfo(PlatformInfo):
 
 
 # Information about Sublime Text.
-class OsxInfo(PlatformInfo):
+class UnixInfo(PlatformInfo):
 
     def __init__(self):
         super().__init__(description='Details about the current platform')

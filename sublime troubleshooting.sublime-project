@@ -18,6 +18,10 @@
 			"osx":
 			{
 				"shell_cmd": "killall \"Sublime Text\" && subl --command echo"
+			},
+			"linux":
+			{
+				"shell_cmd": "killall sublime_text && subl --command echo"
 			}
 		}
 	]
