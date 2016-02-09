@@ -47,6 +47,15 @@ class DataBlock(object):
         return '\n'.join(title + [str(item) for item in self.items])
 
 
+class PreItem(object):
+
+    def __init__(self, content):
+        self.content = content
+
+    def __str__(self):
+        return self.content
+
+
 class DataSection(object):
 
     def __init__(self, title, description='', elements=None):

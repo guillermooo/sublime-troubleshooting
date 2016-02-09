@@ -44,7 +44,7 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
         v.run_command('insert', {'characters': report.generate()})
 
         syntax = 'Packages/Markdown/Markdown.sublime-syntax'
-        if not os.path.exists('Packages/Markdown/Markdown.sublime-syntax'):
+        if not os.path.exists(syntax):
             syntax = 'Packages/Markdown/Markdown.tmLanguage'
         v.run_command('set_file_type', {'syntax': syntax})
 

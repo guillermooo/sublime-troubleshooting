@@ -8,6 +8,9 @@ from ..plugin.data import DataSection
 from ..plugin.data import DataItem
 from ..plugin.data import DataBlock
 from ..plugin.data import DataProvider
+from ..plugin.data import PreItem
+
+from Default.profile import profile_text
 
 
 # Information about a text editor.
@@ -86,6 +89,8 @@ class SublimeTextInfo(EditorInfo):
         self.elements.append(db1)
         self.elements.append(db2)
 
+        self.collect_profiling_data()
+
     def collect_package_data(self):
         block = DataBlock('Package data')
 
@@ -99,5 +104,12 @@ class SublimeTextInfo(EditorInfo):
         block.items.append(DataItem('installed packages', json.dumps(list(files))))
         block.items.append(DataItem('packages', json.dumps(list(packages))))
         block.items.append(DataItem('ignored packages', json.dumps(ignored_packages.get('ignored_packages'))))
+
+        self.elements.append(block)
+
+    def collect_profiling_data(self):
+        block = DataBlock('Profiling data (as reported by Default/profile.py)')
+
+        block.items.append(PreItem(profile_text().strip()))
 
         self.elements.append(block)
