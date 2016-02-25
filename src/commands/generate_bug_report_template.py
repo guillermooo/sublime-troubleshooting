@@ -8,7 +8,7 @@ from ..plugin.report import show_progress
 
 
 __all__ = (
-   'GenerateBugReportTemplateCommand',
+    'GenerateBugReportTemplateCommand',
     )
 
 
@@ -45,12 +45,11 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
     def show(self, report):
         v = self.window.new_file()
         v.set_name("Bug Report for Sublime Text")
-        v.run_command('insert_snippet', { 'contents': '$payload', 'payload': report.generate() })
 
-        syntax = 'Packages/Markdown/Markdown.sublime-syntax'
-        if not os.path.exists(syntax):
-            syntax = 'Packages/Markdown/Markdown.tmLanguage'
-        v.run_command('set_file_type', {'syntax': syntax})
+        v.settings().set('auto_indent', False)  # otherwise indentation gets screwed
+        v.run_command('insert', {'characters': report.generate()})
+
+        v.set_syntax_file('Packages/Markdown/Markdown.tmLanguage')  # also works for .sublime-syntax
 
         self._select_first_input_line(v)
         v.show(v.sel()[0])
