@@ -10,9 +10,6 @@ from .data import DataBlock
 from .data import DataProvider
 from .data import PreItem
 
-if sublime.version() >= '3102':
-    from Default.profile import profile_text
-
 
 # Information about a text editor.
 class EditorInfo(DataProvider, DataSection):
@@ -112,6 +109,7 @@ class SublimeTextInfo(EditorInfo):
         if sublime.version() < '3102':
             return
 
+        from Default.profile import profile_text
         block = DataBlock('Profiling data (as reported by Default/profile.py)')
         block.items.append(PreItem(profile_text().strip()))
         self.elements.append(block)
