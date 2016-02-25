@@ -1,5 +1,5 @@
 from threading import Lock
-import os
+import traceback
 
 import sublime_plugin
 
@@ -24,6 +24,10 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
     def run(self):
         def on_each_done(f):
             nonlocal countdown
+            # sys.exc_info()
+            e = f.exception()
+            if e:
+                traceback.print_exception(type(e), e, e.__traceback__)
             with self.lock:
                 countdown -= 1
                 if countdown == 0:
