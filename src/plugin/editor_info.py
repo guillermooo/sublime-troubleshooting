@@ -102,6 +102,9 @@ class SublimeTextInfo(EditorInfo):
         block.items.append(DataItem('installed packages', json.dumps(files)))
         block.items.append(DataItem('packages', json.dumps(packages)))
         block.items.append(DataItem('ignored packages', json.dumps(ignored_packages)))
+        if sublime.find_resources('Package Control.sublime-settings'):
+            pc_packages = sublime.load_settings('Package Control.sublime-settings').get('installed_packages', [])
+            block.items.append(DataItem('packages managed by Package Control', json.dumps(pc_packages)))
 
         self.elements.append(block)
 
