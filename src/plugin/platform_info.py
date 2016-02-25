@@ -4,10 +4,10 @@ from subprocess import TimeoutExpired
 
 from ..lib.subprocess import check_output
 
-from ..plugin.data import DataSection
-from ..plugin.data import DataItem
-from ..plugin.data import DataBlock
-from ..plugin.data import DataProvider
+from .data import DataSection
+from .data import DataItem
+from .data import DataBlock
+from .data import DataProvider
 
 
 # Information about an OS.

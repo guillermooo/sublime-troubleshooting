@@ -4,12 +4,12 @@ from concurrent.futures import ThreadPoolExecutor
 
 import sublime
 
-from ..plugin.data import DataBlock
-from ..plugin.data import DataItem
-from ..plugin.data import PreItem
-from ..plugin.data import UserDataSection
-from ..plugin.editor_info import EditorInfo
-from ..plugin.platform_info import PlatformInfo
+from .data import DataBlock
+from .data import DataItem
+from .data import PreItem
+from .data import UserDataSection
+from .editor_info import EditorInfo
+from .platform_info import PlatformInfo
 
 
 class MarkDownWriterMixin(object):

@@ -4,11 +4,11 @@ import json
 
 import sublime
 
-from ..plugin.data import DataSection
-from ..plugin.data import DataItem
-from ..plugin.data import DataBlock
-from ..plugin.data import DataProvider
-from ..plugin.data import PreItem
+from .data import DataSection
+from .data import DataItem
+from .data import DataBlock
+from .data import DataProvider
+from .data import PreItem
 
 if sublime.version() >= '3102':
     from Default.profile import profile_text
