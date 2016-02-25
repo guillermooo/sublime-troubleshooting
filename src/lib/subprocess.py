@@ -5,7 +5,7 @@ from subprocess import Popen
 from subprocess import PIPE
 
 __all__ = (
-    'check_output'
+    'check_output',
 )
 
 
@@ -49,12 +49,13 @@ if sys.platform == 'win32':
         else:
             # Fall back to the "default" behavior,
             # but still replace instead of failing.
+            # https://docs.python.org/3.3/library/subprocess.html#frequently-used-arguments
             import locale
-            encoding = locale.getpreferredencoding()
+            encoding = locale.getpreferredencoding(False)
 
         print("decoding binary output with encoding", encoding)
         output = binary_output.decode(encoding, 'replace')
-        output = output.replace("\r\n", "\n")  # do the rest of universal_newlines's job
+        output = output.replace('\r\n', '\n')  # do the rest of universal_newlines's job
         return output
 
 else:
