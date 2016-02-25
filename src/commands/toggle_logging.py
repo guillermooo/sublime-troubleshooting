@@ -50,7 +50,8 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
             }
 
     def run(self):
-        items = [[o, str(self.states[o]) if '+' not in o else '--'] for o in self.options]
+        items = [[o, ', '.join(str(logging_states[sub_o]) for sub_o in o.split("+"))]
+                 for o in self.options]
         self.window.show_quick_panel(items, self.on_select)
 
     def on_select(self, index):
