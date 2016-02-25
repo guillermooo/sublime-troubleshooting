@@ -108,7 +108,7 @@ class WindowsInfo(PlatformInfo):
             return
 
         data = {}
-        for line in (item for item in output.split('\n') if item):
+        for line in filter(None, output.split('\n')):
             if not line.startswith(' '):
                 head, tail = line.split(':', 1)
                 data[head.strip().upper()] = tail.strip()
