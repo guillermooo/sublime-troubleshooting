@@ -95,7 +95,8 @@ class SublimeTextInfo(EditorInfo):
         packages = list(packages)
 
         _, _, files = next(os.walk(sublime.installed_packages_path()))
-        files = [f[:-16] for f in files if f.endswith('.sublime-package')]
+        suffix = '.sublime-package'
+        files = [f[:-len(suffix)] for f in files if f.endswith(suffix)]
 
         ignored_packages = sublime.load_settings('Preferences.sublime-settings').get('ignored_packages', [])
 
