@@ -23,13 +23,15 @@ def show_status(view, key, message, duration=0):
     return dispose
 
 
+logging_states = defaultdict(lambda: False)
+
+
 class ToggleLoggingCommand(sublime_plugin.WindowCommand):
     """Toggles logging of different kinds.
     """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.states = defaultdict(lambda: False)
         self.options = [
             'commands',
             'input',
@@ -57,9 +59,9 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
         kinds = self.options[index]
         for kind in kinds.split('+'):
             try:
-                state = self.states[kind]
+                state = logging_states[kind]
                 self.toggles[kind](not state)
-                self.states[kind] = not state
+                logging_states[kind] = not state
             except KeyError:
                 show_status(self.window.active_view(),
                             'ts.status', 'Troubleshooting: Unknown kind of logging: "{}"'
@@ -69,4 +71,4 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
         fragment = '; '.join('logging %s: {}' % item for item in kinds.split('+'))
         show_status(self.window.active_view(),
                     'ts.status', ('Troubleshooting: ' + fragment)
-                    .format(*[self.states[kind] for kind in kinds.split('+')]), duration=4000)
+                    .format(*[logging_states[kind] for kind in kinds.split('+')]), duration=4000)
