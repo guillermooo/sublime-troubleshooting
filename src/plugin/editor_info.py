@@ -92,15 +92,16 @@ class SublimeTextInfo(EditorInfo):
         block = DataBlock('Package data')
 
         _, packages, _ = next(os.walk(sublime.packages_path()))
+        packages = list(packages)
 
         _, _, files = next(os.walk(sublime.installed_packages_path()))
-        files = (f for f in files if f.endswith('.sublime-package'))
+        files = [f[:-16] for f in files if f.endswith('.sublime-package')]
 
-        ignored_packages = sublime.load_settings('Preferences.sublime-settings')
+        ignored_packages = sublime.load_settings('Preferences.sublime-settings').get('ignored_packages', [])
 
-        block.items.append(DataItem('installed packages', json.dumps(list(files))))
-        block.items.append(DataItem('packages', json.dumps(list(packages))))
-        block.items.append(DataItem('ignored packages', json.dumps(ignored_packages.get('ignored_packages'))))
+        block.items.append(DataItem('installed packages', json.dumps(files)))
+        block.items.append(DataItem('packages', json.dumps(packages)))
+        block.items.append(DataItem('ignored packages', json.dumps(ignored_packages)))
 
         self.elements.append(block)
 
