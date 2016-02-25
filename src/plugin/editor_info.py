@@ -67,9 +67,8 @@ class SublimeTextInfo(EditorInfo):
         view_settings = view.settings()
 
         db1 = DataBlock('View settings')
-        db1.items.append(DataItem('syntax', view_settings.get('syntax')))
-        db1.items.append(DataItem('tab_size', view_settings.get('tab_size')))
-        db1.items.append(DataItem('translate_tabs_to_spaces', view_settings.get('translate_tabs_to_spaces')))
+        for setting_name in ('syntax', 'tab_size', 'translate_tabs_to_spaces'):
+            db1.items.append(DataItem(setting_name, view_settings.get(setting_name)))
 
         db2 = DataBlock('View state')
         db2.items.append(DataItem('is view dirty', view.is_dirty()))
