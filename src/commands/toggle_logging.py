@@ -36,13 +36,15 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
             'commands+input',
             'build systems',
             'result regex',
-            'build systems+result regex'
+            'build systems+result regex',
+            'indexing',
             ]
         self.toggles = {
             'commands': lambda x: sublime.log_commands(x),
             'input': lambda x: sublime.log_input(x),
             'build systems': lambda x: sublime.log_build_systems(x),
             'result regex': lambda x: sublime.log_result_regex(x),
+            'indexing': lambda x: sublime.log_indexing(x),
             }
 
     def run(self):
