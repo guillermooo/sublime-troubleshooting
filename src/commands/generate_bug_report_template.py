@@ -24,7 +24,6 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
     def run(self):
         def on_each_done(f):
             nonlocal countdown
-            # sys.exc_info()
             e = f.exception()
             if e:
                 traceback.print_exception(type(e), e, e.__traceback__)
@@ -46,8 +45,9 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
         v = self.window.new_file()
         v.set_name("Bug Report for Sublime Text")
 
-        v.settings().set('auto_indent', False)  # otherwise indentation gets screwed
-        v.run_command('insert', {'characters': report.generate()})
+        # insert_snippet bypasses auto indentation and $payload supresses snippet features.
+        # Effecitvely, we insert without indentation.
+        v.run_command('insert_snippet', { 'contents': '$payload', 'payload': report.generate() })
 
         v.set_syntax_file('Packages/Markdown/Markdown.tmLanguage')  # also works for .sublime-syntax
 
