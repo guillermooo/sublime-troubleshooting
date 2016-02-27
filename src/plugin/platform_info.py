@@ -24,7 +24,7 @@ class PlatformInfo(DataProvider, DataSection):
         if plat == 'win32':
             info = WindowsInfo()
         elif plat == 'darwin':
-            info = UnixInfo()
+            info = OsxInfo()
         else:
             info = UnixInfo()
         return info
@@ -146,20 +146,7 @@ class UnixInfo(PlatformInfo):
         self.collect_display_data()
 
     def collect_display_data(self):
-        output = check_output(["system_profiler", "-detailLevel", "mini", "SPDisplaysDataType"], universal_newlines=True)
-
-        if not output:
-            return
-
-        lines = output.split('\n')
-        data = [line.split(':', 1) for line in lines if ':' in line]
-        data = { k.strip().upper(): v.strip() for k, v in data if k.strip() and v.strip() }
-
-        db0 = DataBlock('Display information')
-        db0.items.append(DataItem("resolution", data['RESOLUTION']))
-        db0.items.append(DataItem("pixel depth", data['PIXEL DEPTH']))
-
-        self.elements.append(db0)
+        pass
 
     def collect_uname_data(self):
         buf = []
@@ -196,5 +183,24 @@ class UnixInfo(PlatformInfo):
         db0 = DataBlock('System information')
         for item in buf:
             db0.items.append(DataItem(*item.split('=')))
+
+        self.elements.append(db0)
+
+
+class OsxInfo(UnixInfo):
+
+    def collect_display_data(self):
+        output = check_output(["system_profiler", "-detailLevel", "mini", "SPDisplaysDataType"], universal_newlines=True)
+
+        if not output:
+            return
+
+        lines = output.split('\n')
+        data = [line.split(':', 1) for line in lines if ':' in line]
+        data = { k.strip().upper(): v.strip() for k, v in data if k.strip() and v.strip() }
+
+        db0 = DataBlock('Display information')
+        db0.items.append(DataItem("resolution", data['RESOLUTION']))
+        db0.items.append(DataItem("pixel depth", data['PIXEL DEPTH']))
 
         self.elements.append(db0)
