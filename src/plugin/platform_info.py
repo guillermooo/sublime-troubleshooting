@@ -89,7 +89,8 @@ class WindowsInfo(PlatformInfo):
 
         db0 = DataBlock('Display information')
         for item in buf:
-            db0.items.append(DataItem(*item.split('=')))
+            for line in filter(None, item.splitlines()):
+                db0.items.append(DataItem(*line.split('=')))
 
         self.elements.append(db0)
 
