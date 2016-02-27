@@ -56,7 +56,7 @@ class WindowsInfo(PlatformInfo):
 
     @property
     def provider(self):
-        return 'systeminfo.exe and wmic.exe'
+        return 'wmic.exe'
 
     def call(self, cmd, shell=False):
         try:

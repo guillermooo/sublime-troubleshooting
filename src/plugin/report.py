@@ -129,7 +129,8 @@ class Report(MarkDownWriterMixin):
                         self.write_line(str(item))
                         self.write_line('```')
                     else:
-                        self.quote('**' + item.name + ':** ' + str(item.value))
+                        # double spaces at end to ensure lines aren't squished together
+                        self.quote('**' + item.name + ':** ' + str(item.value) + '  ')
             elif isinstance(element, PreItem):
                 self.write_line('```')
                 self.write_line(str(element))
