@@ -53,9 +53,12 @@ if sys.platform == 'win32':
             import locale
             encoding = locale.getpreferredencoding(False)
 
-        print("decoding binary output with encoding", encoding)
+        # print("decoding binary output with encoding", encoding) # Log this properly
         output = binary_output.decode(encoding, 'replace')
         output = output.replace('\r\n', '\n')  # do the rest of universal_newlines's job
+        # wmci likes to output '\r\r\n', so we just replace all '\r'
+        output = output.replace('\r', '')
+        return output.strip()  # strip whitespaces too
         return output
 
 else:
