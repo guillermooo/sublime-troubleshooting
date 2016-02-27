@@ -3,11 +3,15 @@ import abc
 from subprocess import TimeoutExpired
 
 from ..lib.subprocess import check_output
+from ..lib.logging import Logger
 
 from .data import DataSection
 from .data import DataItem
 from .data import DataBlock
 from .data import DataProvider
+
+
+_l = Logger.from_module(__name__)
 
 
 # Information about an OS.
@@ -62,7 +66,11 @@ class WindowsInfo(PlatformInfo):
         try:
             return check_output(cmd, universal_newlines=True, timeout=30, shell=shell)
         except TimeoutExpired:
-            pass
+            _l.debug('timeout expired while gathering data')
+        except FileNotFoundError:
+            raise
+        except Exception as e:
+            _l.debug('unexpected exception while gathering data: %s', e)
 
     def collect(self):
         self.collect_systeminfo_data()
@@ -75,6 +83,7 @@ class WindowsInfo(PlatformInfo):
                 output = self.call(cmd.split())
             except FileNotFoundError:
                 self.elements.append(DataBlock('Could not find wmic.exe'))
+                _l.error('wmic.exe does not appear to be present on the system')
                 return
             except Exception:
                 self.elements.append(DataBlock('Error while calling wmic.exe'))
@@ -85,6 +94,7 @@ class WindowsInfo(PlatformInfo):
 
         if not buf:
             self.elements.append(DataBlock('No data retrieved from wmic.exe'))
+            _l.debug('no data retrieved from wmic.exe')
             return
 
         db0 = DataBlock('Display information')
@@ -139,7 +149,9 @@ class UnixInfo(PlatformInfo):
         try:
             return check_output(cmd, universal_newlines=True, timeout=30, shell=shell)
         except TimeoutExpired:
-            pass
+            _l.debug('timeout expired while gathering data')
+        except Exception as e:
+            _l.debug('unexpected error while gathering data: %s', e)
 
     def collect(self):
         self.collect_uname_data()
@@ -179,9 +191,11 @@ class UnixInfo(PlatformInfo):
             try:
                 output = '{}={}'.format(desc, self.call(cmd.split()))
             except FileNotFoundError:
+                _l.error('could not find command %s', cmd)
                 self.elements.append(DataBlock('Could not find command'))
                 return
             except Exception as e:
+                _l.error('error running command %s: %s', cmd, e)
                 self.elements.append(DataBlock('Error running command: %s' % e))
                 return
 
@@ -191,6 +205,7 @@ class UnixInfo(PlatformInfo):
 
         if not buf:
             self.elements.append(DataBlock('No data retrieved'))
+            _l.debug('no data')
             return
 
         db0 = DataBlock('System information')

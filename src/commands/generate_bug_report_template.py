@@ -1,10 +1,16 @@
-from threading import Lock
 import traceback
+
+from threading import Lock
 
 import sublime_plugin
 
 from ..plugin.report import Report
 from ..plugin.report import show_progress
+
+from ..lib.logging import Logger
+
+
+_l = Logger.from_module(__name__)
 
 
 __all__ = (
@@ -26,6 +32,7 @@ class GenerateBugReportTemplateCommand(sublime_plugin.WindowCommand):
             nonlocal countdown
             e = f.exception()
             if e:
+                _l.debug(e)
                 traceback.print_exception(type(e), e, e.__traceback__)
             with self.lock:
                 countdown -= 1

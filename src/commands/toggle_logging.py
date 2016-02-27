@@ -4,6 +4,12 @@ import sublime
 import sublime_plugin
 
 
+from ..lib.logging import Logger
+
+
+_l = Logger.from_module(__name__)
+
+
 __all__ = (
     'ToggleLoggingCommand',
     )
@@ -64,6 +70,7 @@ class ToggleLoggingCommand(sublime_plugin.WindowCommand):
                 self.toggles[kind](not state)
                 logging_states[kind] = not state
             except KeyError:
+                _l.debug('unknownw kind of logging: %s', kind)
                 show_status(self.window.active_view(),
                             'ts.status', 'Troubleshooting: Unknown kind of logging: "{}"'
                             .format(kind), duration=4000)
