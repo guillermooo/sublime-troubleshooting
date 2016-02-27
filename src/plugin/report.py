@@ -58,9 +58,8 @@ class Report(MarkDownWriterMixin):
         super().__init__()
         self.infos = []
 
-        # In this order because of a bug that will otherwise indent the report in a weird way.
-        self.infos.append(PlatformInfo.from_current())
         self.infos.append(EditorInfo.from_current())
+        self.infos.append(PlatformInfo.from_current())
 
     def collect(self, callback=bool):
         executor = ThreadPoolExecutor(max_workers=1)

@@ -66,21 +66,18 @@ class WindowsInfo(PlatformInfo):
 
     def collect(self):
         self.collect_systeminfo_data()
-        self.collect_wmic_data()
+        self.collect_display_data()
 
-    def collect_wmic_data(self):
+    def collect_wmic_data(self, cmds, block_title):
         buf = []
-
-        cmds = [
-            'wmic desktopmonitor get pixelsperxlogicalinch /value',
-            'wmic desktopmonitor get pixelsperylogicalinch /value',
-        ]
-
         for cmd in cmds:
             try:
                 output = self.call(cmd.split())
             except FileNotFoundError:
                 self.elements.append(DataBlock('Could not find wmic.exe'))
+                return
+            except Exception:
+                self.elements.append(DataBlock('Error while calling wmic.exe'))
                 return
             if not output.strip():
                 continue
@@ -96,47 +93,32 @@ class WindowsInfo(PlatformInfo):
 
         self.elements.append(db0)
 
+    def collect_display_data(self):
+        buf = []
+
+        cmds = [
+            'wmic desktopmonitor get pixelsperxlogicalinch /value',
+            'wmic desktopmonitor get pixelsperylogicalinch /value',
+        ]
+
+        self.collect_wmic_data(cmds, 'Display Information')
+
     def collect_systeminfo_data(self):
-        try:
-            output = self.call(['systeminfo.exe'])
-        except FileNotFoundError:
-            self.elements.append(DataBlock('Could not find systeminfo.exe'))
-            return
+        buf = []
 
-        if not output:
-            self.elements.append(DataBlock('No data retrieved from systeminfo.exe'))
-            return
+        # TODO: add useful pieces of data / remove useless ones
+        cmds = [
+            'wmic os get osarchitecture /value',
+            'wmic os get version /value',
+            'wmic os get buildnumber /value',
+            'wmic os get buildtype /value',
+            'wmic os get caption /value',
+            'wmic os get freephysicalmemory /value',
+            'wmic os get freespaceinpagingfiles /value',
+            'wmic os get freevirtualmemory /value',
+        ]
 
-        data = {}
-        for line in filter(None, output.split('\n')):
-            if not line.startswith(' '):
-                head, tail = line.split(':', 1)
-                data[head.strip().upper()] = tail.strip()
-
-        self.elements.clear()
-
-        db0 = DataBlock('Version and architecture')
-        db0.items.append(DataItem('name', data['OS NAME']))
-        db0.items.append(DataItem('version', data['OS VERSION']))
-        db0.items.append(DataItem('architecture', data['SYSTEM TYPE']))
-        db0.items.append(DataItem('OS build type', data['OS BUILD TYPE']))
-        db0.items.append(DataItem('OS configuration', data['OS CONFIGURATION']))
-
-        db1 = DataBlock('Locale information')
-        db1.items.append(DataItem('input locale', data['INPUT LOCALE']))
-        db1.items.append(DataItem('system locale', data['SYSTEM LOCALE']))
-
-        db2 = DataBlock('System information')
-        db2.items.append(DataItem('windows directory', data['WINDOWS DIRECTORY']))
-        db2.items.append(DataItem('total physical memory', data['TOTAL PHYSICAL MEMORY']))
-        db2.items.append(DataItem('available physical memory', data['AVAILABLE PHYSICAL MEMORY']))
-        db2.items.append(DataItem('virtual memory', data['VIRTUAL MEMORY']))
-        db2.items.append(DataItem('page file location(s)', data['PAGE FILE LOCATION(S)']))
-
-        self.elements.append(db0)
-        self.elements.append(db1)
-        self.elements.append(db2)
-
+        self.collect_wmic_data(cmds, 'Operating System Information')
 
 # Information about Sublime Text.
 class UnixInfo(PlatformInfo):
