@@ -4,11 +4,11 @@ import subprocess as sp
 from subprocess import Popen
 from subprocess import PIPE
 
+from .logging import Logger
+
 __all__ = (
     'check_output',
 )
-
-from .logging import Logger
 
 
 _l = Logger.from_module(__name__)
@@ -25,7 +25,7 @@ if sys.platform == 'win32':
     startup_info.dwFlags = STARTF_USESHOWWINDOW | SW_HIDE
 
 
-    def check_output(args, shell=False, universal_newlines=False, timeout=None):
+    def _check_output(args, shell=False, universal_newlines=False, timeout=None):
         """Conveniently read a process's output on Windows.
 
         Supresses the console window and decodes the binary stream using the
@@ -41,6 +41,7 @@ if sys.platform == 'win32':
         binary_output = data or err
         if not universal_newlines:
             return binary_output
+
         # Determine encoding.
         # Normally we would be able to get the encoding with `sys.stdout.encoding`,
         # but sublime.py overrides `sys.stdout` with a custom writer.
@@ -60,8 +61,8 @@ if sys.platform == 'win32':
         except UnicodeDecodeError:
             _l.debug('decoding error; replacing bad characters')
             output = binary_output.decode(encoding, 'replace')
-        except Exception as e:
-            _l.debug('unexpected error while decoding output')
+        except Exception:
+            _l.exception('unexpected error while decoding output')
             output = ''
         finally:
             output = output.replace('\r\n', '\n')  # do the rest of universal_newlines's job
@@ -69,4 +70,11 @@ if sys.platform == 'win32':
             output = output.replace('\r', '')
             return output.strip()
 else:
-    check_output = sp.check_output
+    _check_output = sp.check_output
+
+
+def check_output(args, shell=False, universal_newlines=False, timeout=None):
+    _l.debug("running %s; shell=%s; universal_newlines=%s;", args, shell, universal_newlines)
+    output = _check_output(args, shell, universal_newlines, timeout)
+    _l.debug("check_output result: %r", output)
+    return output
