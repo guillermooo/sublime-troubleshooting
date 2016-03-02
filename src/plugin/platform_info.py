@@ -69,8 +69,9 @@ class WindowsInfo(PlatformInfo):
             _l.debug('timeout expired while gathering data')
         except FileNotFoundError:
             raise
-        except Exception as e:
-            _l.debug('unexpected exception while gathering data: %s', e)
+        except Exception:
+            _l.exception('unexpected exception while gathering data')
+            raise
 
     def collect(self):
         self.collect_systeminfo_data()
