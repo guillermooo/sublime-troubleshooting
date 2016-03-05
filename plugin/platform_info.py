@@ -33,7 +33,7 @@ class PlatformInfo(DataProvider, DataSection):
         elif plat == 'darwin':
             info = OsxInfo()
         else:
-            info = LnuxInfo()
+            info = LinuxInfo()
         return info
 
     @abc.abstractmethod
