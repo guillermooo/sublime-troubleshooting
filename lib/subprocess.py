@@ -75,6 +75,6 @@ else:
 
 def check_output(args, shell=False, universal_newlines=False, timeout=None):
     _l.debug("running %s; shell=%s; universal_newlines=%s;", args, shell, universal_newlines)
-    output = _check_output(args, shell, universal_newlines, timeout)
+    output = _check_output(args, shell=shell, universal_newlines=universal_newlines, timeout=timeout)
     _l.debug("check_output result: %r", output)
     return output
