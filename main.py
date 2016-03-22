@@ -1,4 +1,5 @@
 from logging import DEBUG
+from logging import INFO
 from logging import StreamHandler
 from logging import Formatter
 
@@ -7,7 +8,7 @@ from .lib.logging import Logger
 
 # Configure this manually if you are a developer
 # TODO: ensure via build system that this is always set to INFO/WARNING for production.
-log_level = DEBUG
+log_level = INFO
 
 
 # Logging setup ///////////////////////////////////////////////////////////////
