@@ -1,4 +1,3 @@
-#
 import sys
 import abc
 from subprocess import TimeoutExpired
@@ -116,7 +115,7 @@ class WindowsInfo(PlatformInfo):
             _l.debug('no data retrieved from wmic.exe')
             return
 
-        db0 = DataBlock('Display information')
+        db0 = DataBlock(block_title)
         for item in buf:
             for line in filter(None, item.splitlines()):
                 db0.items.append(DataItem(*line.split('=')))
