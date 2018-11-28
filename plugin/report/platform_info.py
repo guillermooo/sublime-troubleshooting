@@ -2,8 +2,8 @@ import sys
 import abc
 from subprocess import TimeoutExpired
 
-from ..lib.subprocess import check_output
-from ..lib.logging import Logger
+from ...lib.subprocess import check_output
+from ...lib.logging import Logger
 
 from .data import DataSection
 from .data import DataItem
