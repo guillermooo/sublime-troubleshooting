@@ -3,9 +3,10 @@
         "caption": "Troubleshooting: Generate Bug Report Template",
         "command": "generate_bug_report_template"
     },
-
     {
         "caption": "Troubleshooting: Toggle Logging",
         "command": "toggle_logging"
-    }
+    },
+    { "caption": "Troubleshooting: Disable All Packages", "command": "ts_disable_all_packages" },
+    { "caption": "Troubleshooting: Reenable All Packages", "command": "ts_reenable_all_packages" },
 ]
